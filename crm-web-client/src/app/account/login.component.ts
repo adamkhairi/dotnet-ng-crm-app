@@ -1,18 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { NgClass, NgIf } from '@angular/common';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  FormControl,
-  UntypedFormBuilder,
-  UntypedFormGroup,
-} from '@angular/forms';
-import { first } from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
+import {NgClass, NgIf} from '@angular/common';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators,} from '@angular/forms';
+import {first} from 'rxjs/operators';
 
-import { AccountService, AlertService } from '@app/_services';
+import {AccountService, AlertService} from '@app/_services';
 
 @Component({
   templateUrl: 'login.component.html',
@@ -69,20 +61,20 @@ export class LoginComponent implements OnInit {
 
     this.loading = true;
     this.accountService
-      .login(this.f['username'].value, this.f['password'].value)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          // get return url from query parameters or default to home page
-          // get return url from route parameters or default to '/'
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-          this.router.navigate([returnUrl]);
-        },
-        error: (error) => {
-          this.error = error;
-          this.alertService.error(error);
-          this.loading = false;
-        },
-      });
+    .login(this.f['username'].value, this.f['password'].value)
+    .pipe(first())
+    .subscribe({
+      next: () => {
+        // get return url from query parameters or default to home page
+        // get return url from route parameters or default to '/'
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.router.navigate([returnUrl]);
+      },
+      error: (error) => {
+        this.error = error;
+        this.alertService.error(error);
+        this.loading = false;
+      },
+    });
   }
 }
