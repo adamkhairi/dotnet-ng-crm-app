@@ -8,17 +8,19 @@ import {AlertComponent} from "@app/_components";
 import {appInitializer, ErrorInterceptor, JwtInterceptor} from "@app/_helpers";
 import {ReactiveFormsModule} from "@angular/forms";
 import {AccountService} from "@app/_services";
+import {HomeComponent} from "@app/home";
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    AlertComponent
+    AppRoutingModule,
+  ],
+  declarations: [
+    AppComponent,
+    AlertComponent,
+    HomeComponent
   ],
   providers: [
     {provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService]},
