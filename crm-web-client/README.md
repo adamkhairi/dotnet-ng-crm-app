@@ -1,11 +1,14 @@
 # .NET 7.0 - JWT Authentication API
 
-Documentation at https://jasonwatmore.com/net-7-csharp-jwt-authentication-tutorial-without-aspnet-core-identity
+Resources : 
+
+https://jasonwatmore.com/net-7-csharp-jwt-authentication-tutorial-without-aspnet-core-identity
 
 
-# Angular 15/16 Free Course
 
-In this free step by step Angular course we'll be covering how to implement routing, authentication, registration and CRUD functionality in Angular.
+# Angular 16
+
+Resources :
 
 * [Part 1 - Create Base Project Structure](https://jasonwatmore.com/angular-15-free-course-1-create-base-project-structure)
 * [Part 2 - Add Routing & Multiple Pages](https://jasonwatmore.com/angular-15-free-course-2-add-routing-multiple-pages)
