@@ -1,0 +1,7 @@
+{
+  "LoggerSettings": {
+    "AppName": "FSH.Starter",
+    "WriteToFile": false,
+    "StructuredConsoleLogging": true
+  }
+}

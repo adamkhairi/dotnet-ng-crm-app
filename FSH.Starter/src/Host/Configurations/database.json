@@ -1,0 +1,6 @@
+{
+  "DatabaseSettings": {
+    "DBProvider": "mysql",
+    "ConnectionString": "server=localhost;uid=root;pwd=Azerty@123;database=webApiDb;Allow User Variables=True"
+  }
+}

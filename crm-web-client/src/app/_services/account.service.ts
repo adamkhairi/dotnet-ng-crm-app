@@ -8,7 +8,7 @@ import {environment} from '@environments/environment';
 import {User} from '@app/_models';
 import {Account} from "@app/_models/account";
 
-const subUrl = `accounts`;
+const subUrl = `tokens`;
 const baseUrl = `${environment.apiUrl}/${subUrl}`;
 
 
@@ -30,7 +30,7 @@ export class AccountService {
   }
 
   login(email: string, password: string) {
-    return this.http.post<any>(`${baseUrl}/authenticate`, { email, password }, { withCredentials: true })
+    return this.http.post<any>(`${baseUrl}`, { email, password }, { withCredentials: true })
     .pipe(map(account => {
       this.accountSubject.next(account);
       this.startRefreshTokenTimer();
@@ -46,7 +46,7 @@ export class AccountService {
   }
 
   refreshToken() {
-    return this.http.post<any>(`${baseUrl}/refresh-token`, {}, { withCredentials: true })
+    return this.http.post<any>(`${baseUrl}/refresh`, {}, { withCredentials: true })
     .pipe(map((account) => {
       this.accountSubject.next(account);
       this.startRefreshTokenTimer();
