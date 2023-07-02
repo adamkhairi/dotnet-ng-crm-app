@@ -3,12 +3,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { AccountRoutingModule } from './account-routing.module';
-import { LayoutComponent } from './layout.component';
-import {ResetPasswordComponent} from "@app/account/reset-password.component";
-import {LoginComponent} from "@app/account/login.component";
-import {RegisterComponent} from "@app/account/register.component";
-import {VerifyEmailComponent} from "@app/account/verify-email.component";
-import {ForgotPasswordComponent} from "@app/account/forgot-password.component";
+import { LayoutComponent } from './layout/layout.component';
+import {ResetPasswordComponent} from "@app/account/reset-password/reset-password.component";
+import {LoginComponent} from "@app/account/login/login.component";
+import {RegisterComponent} from "@app/account/register/register.component";
+import {VerifyEmailComponent} from "@app/account/verify-email/verify-email.component";
+import {ForgotPasswordComponent} from "@app/account/forgot-password/forgot-password.component";
 
 
 

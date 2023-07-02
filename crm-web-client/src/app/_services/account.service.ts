@@ -3,13 +3,11 @@ import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, finalize, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-
 import {environment} from '@environments/environment';
-import {User} from '@app/_models';
 import {Account} from "@app/_models/account";
 
 const subUrl = `tokens`;
-const baseUrl = `${environment.apiUrl}/${subUrl}`;
+const baseUrl = `${environment.apiUrl}`;
 
 
 @Injectable({providedIn: 'root'})
@@ -30,7 +28,7 @@ export class AccountService {
   }
 
   login(email: string, password: string) {
-    return this.http.post<any>(`${baseUrl}`, { email, password }, { withCredentials: true })
+    return this.http.post<any>(`${baseUrl}/tokens`, { email, password }, { withCredentials: true })
     .pipe(map(account => {
       this.accountSubject.next(account);
       this.startRefreshTokenTimer();
@@ -39,7 +37,7 @@ export class AccountService {
   }
 
   logout() {
-    this.http.post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true }).subscribe();
+    this.http.post<any>(`${baseUrl}/tokens/revoke-token`, {}, { withCredentials: true }).subscribe();
     this.stopRefreshTokenTimer();
     this.accountSubject.next(null);
     this.router.navigate(['/account/login']);
