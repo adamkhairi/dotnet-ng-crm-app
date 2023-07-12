@@ -5,6 +5,7 @@ import {BehaviorSubject, finalize, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {Account} from "@app/_models/account";
+import {TokenRequest, TokenResponse, TokensClient} from "@app/_helpers/api-client";
 
 const subUrl = `tokens`;
 const baseUrl = `${environment.apiUrl}`;
@@ -12,14 +13,15 @@ const baseUrl = `${environment.apiUrl}`;
 
 @Injectable({providedIn: 'root'})
 export class AccountService {
-  private accountSubject: BehaviorSubject<Account | null>;
-  public account: Observable<Account | null>;
+  private accountSubject: BehaviorSubject<TokenResponse | null>;
+  public account: Observable<TokenResponse | null>;
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private apiClient: TokensClient
   ) {
-    this.accountSubject = new BehaviorSubject<Account | null>(null);
+    this.accountSubject = new BehaviorSubject<TokenResponse | null>(null);
     this.account = this.accountSubject.asObservable();
   }
 
@@ -28,8 +30,9 @@ export class AccountService {
   }
 
   login(email: string, password: string) {
-    return this.http.post<any>(`${baseUrl}/tokens`, { email, password }, { withCredentials: true })
-    .pipe(map(account => {
+    // return this.http.post<any>(`${baseUrl}/tokens`, { email, password }, { withCredentials: true })
+   return this.apiClient.getToken('root',<TokenRequest>{email,password })
+      .pipe(map(account => {
       this.accountSubject.next(account);
       this.startRefreshTokenTimer();
       return account;
@@ -101,7 +104,7 @@ export class AccountService {
     return this.http.delete(`${baseUrl}/${id}`)
     .pipe(finalize(() => {
       // auto logout if the logged in account was deleted
-      if (id === this.accountValue?.id)
+      if (id === this.accountValue?.token)
         this.logout();
     }));
   }
@@ -112,7 +115,7 @@ export class AccountService {
 
   private startRefreshTokenTimer() {
     // parse json object from base64 encoded jwt token
-    const jwtBase64 = this.accountValue!.jwtToken!.split('.')[1];
+    const jwtBase64 = this.accountValue!.token!.split('.')[1];
     const jwtToken = JSON.parse(atob(jwtBase64));
 
     // set a timeout to refresh the token a minute before it expires
