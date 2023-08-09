@@ -25,7 +25,7 @@ export class AccountService {
     this.account = this.accountSubject.asObservable();
   }
 
-  public get accountValue() {
+  public get accountValue(): TokenResponse | null {
     return this.accountSubject.value;
   }
 
