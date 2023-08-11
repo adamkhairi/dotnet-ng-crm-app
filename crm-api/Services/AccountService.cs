@@ -56,8 +56,8 @@ public class AccountService : IAccountService
     {
         var account = _context.Accounts.SingleOrDefault(x => x.Email == model.Email);
 
-        // validate
-        if (account == null || !account.IsVerified || !BCrypt.Verify(model.Password, account.PasswordHash))
+        // validate || !account.IsVerified 
+        if (account == null || !BCrypt.Verify(model.Password, account.PasswordHash))
             throw new AppException("Email or password is incorrect");
 
         // authentication successful so generate jwt and refresh tokens

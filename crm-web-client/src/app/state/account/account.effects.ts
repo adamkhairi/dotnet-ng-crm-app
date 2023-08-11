@@ -12,7 +12,8 @@ import { switchMap, map, catchError, withLatestFrom } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.state';
 import {AccountService} from "@app/_services";
-import {selectAllAccounts} from "@app/state/account/account.selectors";
+import {selectAccounts, selectAllAccounts} from "@app/state/account/account.selectors";
+import {RegisterRequest} from "@app/_helpers/crm-api-client";
 
 @Injectable()
 export class AccountEffects {
@@ -28,9 +29,9 @@ export class AccountEffects {
       ofType(loadAccounts),
       switchMap(() =>
         // Call the getAccounts method, convert it to an observable
-        from(this.AccountService.getAll()).pipe(
+        from(this.store.select(selectAccounts)).pipe(
           // Take the returned value and return a new success action containing the Accounts
-          map((Accounts) => loadAccountsSuccess({ Accounts: Accounts })),
+          map((Accounts) => loadAccountsSuccess({ Accounts: Accounts.Accounts })),
           // Or... if it errors return a new failure action containing the error
           catchError((error) => of(loadAccountsFailure({ error })))
         )
@@ -44,7 +45,7 @@ export class AccountEffects {
       this.actions$.pipe(
         ofType(addAccount, removeAccount),
         withLatestFrom(this.store.select(selectAllAccounts)),
-        switchMap(([action, Accounts]) => from(this.AccountService.register(Accounts)))
+        switchMap(([action, Accounts]) => from(this.AccountService.register(<RegisterRequest>Accounts)))
       ),
     // Most effects dispatch another action, but this one is just a "fire and forget" effect
     { dispatch: false }
