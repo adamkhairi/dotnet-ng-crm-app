@@ -20,7 +20,7 @@ const subUrl = `tokens`;
 export class AccountService {
     private accountSubject: BehaviorSubject<AuthenticateResponse | null>;
     public account: Observable<AuthenticateResponse | null>;
-    private baseUrl: string;
+    public baseUrl: string;
 
     constructor(
         private router: Router,
@@ -30,7 +30,7 @@ export class AccountService {
     ) {
         this.accountSubject = new BehaviorSubject<AuthenticateResponse | null>(null);
         this.account = this.accountSubject.asObservable();
-        this.baseUrl = `${baseUrl}+"/accounts"`;
+        this.baseUrl = `${baseUrl}/api/accounts`;
     }
 
     public get accountValue() {
@@ -38,8 +38,9 @@ export class AccountService {
     }
 
     login(email: string, password: string) {
-        // return this.http.post<any>(`${baseUrl}/tokens`, { email, password }, { withCredentials: true })
-        return this.apiClient.authenticate(<AuthenticateRequest>{email, password})
+      debugger
+         return this.http.post<any>(`${this.baseUrl}/authenticate`, { email, password }, { withCredentials: true })
+        // return this.apiClient.authenticate(<AuthenticateRequest>{email, password})
             .pipe(map(account => {
                 this.accountSubject.next(account);
                 this.startRefreshTokenTimer();
@@ -48,16 +49,16 @@ export class AccountService {
     }
 
     logout() {
-        // this.http.post<any>(`${this.baseUrl}/tokens/revoke-token`, {}, {withCredentials: true}).subscribe();
-        this.apiClient.revokeToken(<RevokeTokenRequest>{token: this.accountValue?.jwtToken});
+         this.http.post<any>(`${this.baseUrl}/tokens/revoke-token`, {}, {withCredentials: true}).subscribe();
+        // this.apiClient.revokeToken(<RevokeTokenRequest>{token: this.accountValue?.jwtToken});
         this.stopRefreshTokenTimer();
         this.accountSubject.next(null);
         this.router.navigate(['/account/login']);
     }
 
     refreshToken() {
-        // return this.http.post<any>(`${baseUrl}/refresh`, {}, { withCredentials: true })
-        return this.apiClient.refreshToken()
+        return this.http.post<any>(`${this.baseUrl}/refresh`, {}, { withCredentials: true })
+        // return this.apiClient.refreshToken()
             .pipe(map((account) => {
                 this.accountSubject.next(account);
                 this.startRefreshTokenTimer();
@@ -66,13 +67,13 @@ export class AccountService {
     }
 
     register(account: RegisterRequest) {
-        // return this.http.post(`${baseUrl}/register`, account);
-        return this.apiClient.register(account);
+        return this.http.post(`${this.baseUrl}/register`, account);
+        // return this.apiClient.register(account);
     }
 
     verifyEmail(token: string) {
-        // return this.http.post(`${baseUrl}/verify-email`, { token });
-        return this.apiClient.verifyEmail(<VerifyEmailRequest>{token});
+        return this.http.post(`${this.baseUrl}/verify-email`, { token });
+        // return this.apiClient.verifyEmail(<VerifyEmailRequest>{token});
     }
 
     forgotPassword(email: string) {
@@ -88,8 +89,8 @@ export class AccountService {
     }
 
     getAll() {
-        // return this.http.get<Account[]>(baseUrl);
-        return this.apiClient.accountsAll();
+         return this.http.get<Account[]>(this.baseUrl);
+      // return this.apiClient.accountsAll();
     }
 
     getById(id: string) {

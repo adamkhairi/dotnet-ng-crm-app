@@ -18,14 +18,15 @@ import {AccountReducer} from "@app/state/account/account.reducer";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {EffectsModule} from "@ngrx/effects";
 import {AccountEffects} from "@app/state/account/account.effects";
+import { NavBarComponent } from './_components/nav-bar/nav-bar.component';
 
 @NgModule({
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
+    IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
     StoreModule.forRoot({accounts: AccountReducer}),
     StoreDevtoolsModule.instrument({
@@ -37,7 +38,8 @@ import {AccountEffects} from "@app/state/account/account.effects";
   declarations: [
     AppComponent,
     AlertComponent,
-    HomeComponent
+    HomeComponent,
+    NavBarComponent
   ],
   providers: [
     {

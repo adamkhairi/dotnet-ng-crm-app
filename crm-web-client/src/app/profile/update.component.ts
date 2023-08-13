@@ -57,10 +57,12 @@ export class UpdateComponent implements OnInit {
     .pipe(first())
     .subscribe({
       next: () => {
+        debugger;
         this.alertService.success('Update successful', {keepAfterRouteChange: true});
         this.router.navigate(['../'], {relativeTo: this.route});
       },
       error: error => {
+        debugger;
         this.alertService.error(error);
         this.submitting = false;
       }
