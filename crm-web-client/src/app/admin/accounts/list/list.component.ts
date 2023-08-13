@@ -2,15 +2,21 @@
 import {first} from 'rxjs/operators';
 
 import {AccountService} from '@app/_services';
+import {Store} from "@ngrx/store";
+import {loadAccounts} from "@app/state/account/account.actions";
+import {selectAccounts, selectAllAccounts} from "@app/state/account/account.selectors";
+import {Account} from "@app/_models";
 
 @Component({templateUrl: 'list.component.html'})
 export class ListComponent implements OnInit {
   accounts?: any[];
+  public allTodos$ = this.store.select(selectAllAccounts);
 
-  constructor(private accountService: AccountService) {
+  constructor(private accountService: AccountService,private store: Store) {
   }
 
   ngOnInit() {
+    this.store.dispatch(loadAccounts());
     this.accountService.getAll()
     .pipe(first())
     .subscribe(accounts => this.accounts = accounts);

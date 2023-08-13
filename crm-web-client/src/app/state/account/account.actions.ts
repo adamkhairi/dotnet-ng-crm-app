@@ -12,13 +12,12 @@ export const removeAccount = createAction(
 );
 
 export const loadAccounts = createAction(
-  '[Account Page] Load Accounts',
-props<{ id: string }>()
+  '[Account Page] Load Accounts'
 );
 
 export const loadAccountsSuccess = createAction(
   '[Account API] Account Load Success',
-  props<{ Accounts: Account }>()
+  props<{ Accounts: Account[] }>()
 );
 
 export const loadAccountsFailure = createAction(

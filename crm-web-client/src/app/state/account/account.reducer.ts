@@ -5,13 +5,13 @@ import {Account} from "@app/_models";
 export type AccountStatus = 'pending' | 'loading' | 'error' | 'success';
 
 export interface AccountState {
-  Accounts: Account;
+  Accounts: Account[];
   error: string | null;
   status: AccountStatus;
 }
 
 export const initialState: AccountState = {
-  Accounts: {},
+  Accounts: [],
   error: null,
   status: 'pending',
 };
@@ -22,12 +22,12 @@ export const AccountReducer = createReducer(
   // Add the new Account to the Accounts array
   on(addAccount, (state, {content}) => ({
     ...state,
-    Accounts: {id: Date.now().toString(), content: content},
+    Accounts: [ ...state.Accounts, {id: Date.now().toString(), ...content}],
   })),
   // Remove the Account from the Accounts array
   on(removeAccount, (state, {id}) => ({
     ...state,
-    Accounts: state.Accounts.id != null ? {} : {}
+    Accounts: state.Accounts
     ,
   })),
   // Trigger loading the Accounts
