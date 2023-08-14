@@ -1,10 +1,14 @@
 ﻿import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
 
 import {AccountService, AlertService} from '@app/_services';
 import {MustMatch} from '@app/_helpers';
+import {Account} from "@app/_models";
+import * as AccountActions from "@app/state/account/account.actions";
+import {Store} from "@ngrx/store";
+import {selectAccountError, selectAccountStatus} from "@app/state/account/account.selectors";
 
 @Component({templateUrl: 'add-edit.component.html'})
 export class AddEditComponent implements OnInit {
@@ -14,14 +18,21 @@ export class AddEditComponent implements OnInit {
   loading = false;
   submitting = false;
   submitted = false;
+  status$ = this.store.select(selectAccountStatus);
+  error$ = this.store.select(selectAccountError);
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
+    private alertService: AlertService,
     private accountService: AccountService,
-    private alertService: AlertService
+    private store: Store
   ) {
+  }
+
+  // convenience getter for easy access to form fields
+  get f() {
+    return this.form.controls;
   }
 
   ngOnInit() {
@@ -40,6 +51,16 @@ export class AddEditComponent implements OnInit {
       validator: MustMatch('password', 'confirmPassword')
     });
 
+    this.error$.subscribe(error => {
+      if (error)
+        this.alertService.error(error);
+    })
+
+    this.status$.subscribe(status => {
+      debugger
+      this.loading = status == 'loading';
+    })
+
     this.title = 'Create Account';
     if (this.id) {
       // edit mode
@@ -54,9 +75,12 @@ export class AddEditComponent implements OnInit {
     }
   }
 
-  // convenience getter for easy access to form fields
-  get f() {
-    return this.form.controls;
+  updateAccount(id: string, account: Account) {
+    this.store.dispatch(AccountActions.updateAccount({id: id, account: account}));
+  }
+
+  addAccount(account: Account) {
+    this.store.dispatch(AccountActions.addAccount({account: account}));
   }
 
   onSubmit() {
@@ -76,24 +100,24 @@ export class AddEditComponent implements OnInit {
     let saveAccount;
     let message: string;
     if (this.id) {
-      saveAccount = () => this.accountService.update(this.id!, this.form.value);
+      this.updateAccount(this.id!, this.form.value);
       message = 'Account updated';
     } else {
-      saveAccount = () => this.accountService.create(this.form.value);
+      this.addAccount(this.form.value);
       message = 'Account created';
     }
 
-    saveAccount()
-    .pipe(first())
-    .subscribe({
-      next: () => {
-        this.alertService.success(message, {keepAfterRouteChange: true});
-        this.router.navigateByUrl('/admin/accounts');
-      },
-      error: error => {
-        this.alertService.error(error);
-        this.submitting = false;
-      }
-    });
+    // saveAccount()
+    // .pipe(first())
+    // .subscribe({
+    //   next: () => {
+    //     this.alertService.success(message, {keepAfterRouteChange: true});
+    //     this.router.navigateByUrl('/admin/accounts');
+    //   },
+    //   error: error => {
+    //     this.alertService.error(error);
+    this.submitting = false;
+    //   }
+    // });
   }
 }

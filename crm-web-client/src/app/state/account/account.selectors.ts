@@ -1,10 +1,24 @@
-import { createSelector } from '@ngrx/store';
-import { AppState } from '../app.state';
-import { AccountState } from './account.reducer';
+import {createFeatureSelector, createSelector} from '@ngrx/store';
+import {AccountState} from './account.reducer';
 
-export const selectAccounts = (state: AppState) => state.accounts;
+export const selectAccountState = createFeatureSelector<AccountState>('accounts');
 
-export const selectAllAccounts = createSelector(
-  selectAccounts,
-  (state: AccountState) => state.Accounts
+export const selectAccounts = createSelector(
+  selectAccountState,
+  state => state.accounts
+);
+
+export const selectAccountStatus = createSelector(
+  selectAccountState,
+  (state) => state.status
+);
+
+export const selectAccountsLoading = createSelector(
+  selectAccountState,
+  state => state.status == 'loading'
+);
+
+export const selectAccountError = createSelector(
+  selectAccountState,
+  state =>  state.error
 );

@@ -1,17 +1,17 @@
 import {createReducer, on} from '@ngrx/store';
-import {addAccount, loadAccounts, loadAccountsFailure, loadAccountsSuccess, removeAccount,} from './account.actions';
+import * as AccountsActions from './account.actions';
 import {Account} from "@app/_models";
 
 export type AccountStatus = 'pending' | 'loading' | 'error' | 'success';
 
 export interface AccountState {
-  Accounts: Account[];
+  accounts: Account[];
   error: string | null;
   status: AccountStatus;
 }
 
 export const initialState: AccountState = {
-  Accounts: [],
+  accounts: [],
   error: null,
   status: 'pending',
 };
@@ -19,30 +19,49 @@ export const initialState: AccountState = {
 export const AccountReducer = createReducer(
   // Supply the initial state
   initialState,
-  // Add the new Account to the Accounts array
-  on(addAccount, (state, {content}) => ({
+
+  // Handle successful Actions
+  // loading action
+  on(AccountsActions.loadAccounts, (state) => ({...state, status: 'loading' as AccountStatus})),
+  on(AccountsActions.loadAccountsSuccess, (state, {accounts}) => ({
     ...state,
-    Accounts: [ ...state.Accounts, {id: Date.now().toString(), ...content}],
-  })),
-  // Remove the Account from the Accounts array
-  on(removeAccount, (state, {id}) => ({
-    ...state,
-    Accounts: state.Accounts
-    ,
-  })),
-  // Trigger loading the Accounts
-  on(loadAccounts, (state) => ({...state, status: 'loading' as AccountStatus})),
-  // Handle successfully loaded Accounts
-  on(loadAccountsSuccess, (state, {Accounts}) => ({
-    ...state,
-    Accounts: Accounts,
-    error: null,
+    accounts,
     status: 'success' as AccountStatus,
   })),
-  // Handle Accounts load failure
-  on(loadAccountsFailure, (state, {error}) => ({
+
+  // Add action
+  on(AccountsActions.addAccount, state => ({...state, status: 'loading' as AccountStatus})),
+  on(AccountsActions.addAccountSuccess, (state, {account}) => ({
     ...state,
-    error: error,
-    status: 'error' as AccountStatus,
-  }))
+    accounts: [...state.accounts, account],
+    status: 'success' as AccountStatus
+  })),
+
+  // Update action
+  on(AccountsActions.updateAccount, state => ({...state, status: 'loading' as AccountStatus})),
+  on(AccountsActions.updateAccountSuccess, (state, {account}) => ({
+    ...state,
+    accounts: state.accounts.map(account => account.id === account.id ? account : account),
+    status: 'success' as AccountStatus
+  })),
+
+  // Delete action
+  on(AccountsActions.deleteAccount, state => ({...state, status: 'loading' as AccountStatus})),
+  on(AccountsActions.deleteAccountSuccess, (state, {id}) => ({
+    ...state,
+    accounts: state.accounts.filter(account => account.id !== id),
+    status: 'success' as AccountStatus
+  })),
+
+  // Handle failure Actions
+  on(
+    AccountsActions.addAccountFailure,
+    AccountsActions.updateAccountFailure,
+    AccountsActions.deleteAccountFailure,
+    (state, { error }) => ({
+      ...state,
+      error,
+      status: 'error' as AccountStatus
+    })
+  )
 );
