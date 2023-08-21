@@ -76,6 +76,9 @@
         <div *ngIf="f['confirmPassword'].errors?.['mustMatch']">Passwords must match</div>
       </div>
     </div>
+    <div class="mb-3 col">
+      <span>{{ (error$ | async) | json }}</span>
+    </div>
   </div>
   <div class="mb-3">
     <button [disabled]="submitting" class="btn btn-primary">

@@ -24,10 +24,15 @@
       </button>
     </td>
   </tr>
-  <tr *ngIf="!(accounts$ | async)">
+  <tr *ngIf="!(status$ | async)">
     <td colspan="4" class="text-center">
       <span class="spinner-border spinner-border-lg align-center"></span>
     </td>
   </tr>
+<!--  <tr >-->
+<!--    <td colspan="4" class="text-center">-->
+<!--      <span>{{ (error$| async) | json }}</span>-->
+<!--    </td>-->
+<!--  </tr>-->
   </tbody>
 </table>

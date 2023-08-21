@@ -17,10 +17,9 @@ import {Observable} from "rxjs";
 
 @Component({templateUrl: 'list.component.html'})
 export class ListComponent implements OnInit {
-  accounts?: any[];
   // public allTodos$ = this.store.select(selectAllAccounts);
-  public loading: boolean | undefined;
-  public error: any;
+  // public loading: boolean | undefined;
+  // public error: any;
 
   accounts$: Observable<any[]> | undefined;
   status$: Observable<string> | undefined;
@@ -32,15 +31,15 @@ export class ListComponent implements OnInit {
   ngOnInit() {
     debugger
     this.store.dispatch(loadAccounts());
-    this.store.select(selectAccounts).subscribe((accounts: Account[]) => {
-      this.accounts = accounts;
-    });
-    this.store.select(selectAccountsLoading).subscribe(loading => {
-      this.loading = loading;
-    });
-    this.store.select(selectAccountError).subscribe(error => {
-      this.error = error;
-    });
+    // this.store.select(selectAccounts).subscribe((accounts: Account[]) => {
+    //   this.accounts = accounts;
+    // });
+    // this.store.select(selectAccountsLoading).subscribe(loading => {
+    //   this.loading = loading;
+    // });
+    // this.store.select(selectAccountError).subscribe(error => {
+    //   this.error = error;
+    // });
 
     this.accounts$ = this.store.select(selectAccounts);
     this.status$ = this.store.select(selectAccountStatus);
