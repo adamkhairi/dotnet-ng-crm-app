@@ -1,15 +1,15 @@
-<!-- nav -->
-<nav class="navbar navbar-expand navbar-dark bg-dark px-3" *ngIf="user">
-  <div class="navbar-nav">
-    <a class="nav-item nav-link" routerLink="/" routerLinkActive="active"
-       [routerLinkActiveOptions]="{exact: true}">Home</a>
-    <a class="nav-item nav-link" routerLink="/users" routerLinkActive="active">Users</a>
-    <button class="btn btn-link nav-item nav-link" (click)="logout()">Logout</button>
-  </div>
-</nav>
+<div class="app-container" [ngClass]="{ 'bg-light': account }">
 
-<!-- main app container -->
-<div class="container">
+  <!-- main nav -->
+  <nav-bar [account]="account" (logout)="logout()"></nav-bar>
+
+  <!-- subnav router outlet -->
+  <router-outlet name="subnav"></router-outlet>
+
+  <!-- global alert -->
   <alert></alert>
+
+  <!-- main router outlet -->
   <router-outlet></router-outlet>
+
 </div>

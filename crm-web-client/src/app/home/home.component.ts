@@ -5,12 +5,9 @@ import {AccountService} from '@app/_services';
 
 @Component({
   templateUrl: 'home.component.html',
-  standalone: true
 })
 export class HomeComponent {
-  user: User | null;
+  account = this.accountService.accountValue;
 
-  constructor(private accountService: AccountService) {
-    this.user = this.accountService.userValue;
-  }
+  constructor(private accountService: AccountService) { }
 }
