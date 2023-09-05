@@ -4,17 +4,9 @@ import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, finalize, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Account} from "@app/_models/account";
-import {
-    AccountsClient, API_BASE_URL,
-    AuthenticateRequest,
-    AuthenticateResponse,
-    RegisterRequest,
-    RevokeTokenRequest,
-    VerifyEmailRequest
-} from "@app/_helpers/crm-api-client";
+import {AccountsClient, API_BASE_URL, AuthenticateResponse, RegisterRequest} from "@app/_helpers/crm-api-client";
 
 const subUrl = `tokens`;
-
 
 @Injectable({providedIn: 'root'})
 export class AccountService {
@@ -27,21 +19,27 @@ export class AccountService {
         private http: HttpClient,
         @Inject(API_BASE_URL) baseUrl: string,
         private apiClient: AccountsClient,
+
     ) {
         this.accountSubject = new BehaviorSubject<AuthenticateResponse | null>(null);
         this.account = this.accountSubject.asObservable();
         this.baseUrl = `${baseUrl}/api/accounts`;
     }
 
+
     public get accountValue() {
-        return this.accountSubject.value;
+      const storedUser = localStorage.getItem('currentUser');
+      return storedUser ? JSON.parse(storedUser) : null;
     }
+
 
     login(email: string, password: string) {
       debugger
+
          return this.http.post<any>(`${this.baseUrl}/authenticate`, { email, password }, { withCredentials: true })
         // return this.apiClient.authenticate(<AuthenticateRequest>{email, password})
             .pipe(map(account => {
+                localStorage.setItem('currentUser', JSON.stringify(account));
                 this.accountSubject.next(account);
                 this.startRefreshTokenTimer();
                 return account;
@@ -52,6 +50,7 @@ export class AccountService {
          this.http.post<any>(`${this.baseUrl}/tokens/revoke-token`, {}, {withCredentials: true}).subscribe();
         // this.apiClient.revokeToken(<RevokeTokenRequest>{token: this.accountValue?.jwtToken});
         this.stopRefreshTokenTimer();
+        localStorage.removeItem('currentUser');
         this.accountSubject.next(null);
         this.router.navigate(['/account/login']);
     }

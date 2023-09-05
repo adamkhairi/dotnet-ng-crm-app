@@ -1,6 +1,6 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
-import { AppModule } from '@app/app.module';
+import {AppModule} from '@app/app.module';
 import {environment} from "@environments/environment";
 import {enableProdMode} from "@angular/core";
 
@@ -10,3 +10,19 @@ if (environment.production) {
 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
+
+
+// bootstrapApplication(AppComponent, {
+//   providers: [
+//     provideRouter(routes),
+//     provideHttpClient(
+//       withInterceptors([
+//         JwtInterceptor,
+//         ErrorInterceptor,
+//
+//         // fake backend
+//         // fakeBackendInterceptor
+//       ])
+//     )
+//   ]
+// });

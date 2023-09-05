@@ -15,7 +15,7 @@ export class AppComponent {
   title = 'crm-web-client';
 
   constructor(@Inject(API_BASE_URL) public baseUrl: String,private accountService: AccountService) {
-    this.accountService.account.subscribe(x => this.account = x);
+    this.account = this.accountService.accountValue
   }
 
   logout() {

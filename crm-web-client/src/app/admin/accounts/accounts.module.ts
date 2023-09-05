@@ -3,8 +3,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 
 import {AccountsRoutingModule} from './accounts-routing.module';
-import {ListComponent} from './list/list.component';
-import {AddEditComponent} from './edit/add-edit.component';
+import {ListComponent} from '@app/admin';
+import {AddEditComponent} from '@app/admin';
 
 @NgModule({
   imports: [
