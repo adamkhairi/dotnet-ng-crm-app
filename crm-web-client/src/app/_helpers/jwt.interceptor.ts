@@ -24,7 +24,7 @@ import {Observable} from "rxjs";
 //   }
 // }
 
-export function JwtInterceptor(request: HttpRequest<any>, next: HttpHandlerFn) {
+export const JwtInterceptor = (request: HttpRequest<any>, next: HttpHandlerFn) => {
   // add auth header with jwt if user is logged in and request is to the api url
   const accountService = inject(AccountService);
   const user = accountService.accountValue;
@@ -37,4 +37,4 @@ export function JwtInterceptor(request: HttpRequest<any>, next: HttpHandlerFn) {
   }
 
   return next(request);
-}
+};

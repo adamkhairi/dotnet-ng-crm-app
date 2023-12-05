@@ -48,7 +48,7 @@ import { NavBarComponent } from './_components/nav-bar/nav-bar.component';
     },
     AccountsClient,
     {provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService]},
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    // {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
 
     // provider used to create fake backend
