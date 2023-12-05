@@ -32,7 +32,7 @@ import { NavBarComponent } from './_components/nav-bar/nav-bar.component';
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
-    }),
+    connectInZone: true}),
     EffectsModule.forRoot([AccountEffects]),
   ],
   declarations: [
